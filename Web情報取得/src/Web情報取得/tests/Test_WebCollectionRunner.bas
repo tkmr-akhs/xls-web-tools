@@ -64,12 +64,12 @@ Public Sub Test_WebCollectionRunner_Œ»İƒy[ƒW‚ğ‘ÎÛIDåƒL[‚Å„‰ñ‚µŠù‘¶OK‚ÍƒXƒL
     tool_settings.DownloadRootPath = "D:\Root"
     tool_settings.DownloadLinkSelector = "#download"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -107,16 +107,16 @@ Public Sub Test_WebCollectionRunner_Œ»İƒy[ƒW‚ğ‘ÎÛIDåƒL[‚Å„‰ñ‚µŠù‘¶OK‚ÍƒXƒL
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
     Set ProgStat = Nothing
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     Dim runner As WebCollectionRunner
-    Set runner = New_WebCollectionRunner(lifecycle, tool_settings)
+    Set runner = New_WebCollectionRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
@@ -132,7 +132,7 @@ Public Sub Test_WebCollectionRunner_Œ»İƒy[ƒW‚ğ‘ÎÛIDåƒL[‚Å„‰ñ‚µŠù‘¶OK‚ÍƒXƒL
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/execute/sync", "{""script"":""openDetail(1)"",""args"":[]}")
     Assert.EqualsNumeric 0, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/execute/sync", "{""script"":""openDetail(0)"",""args"":[]}")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/element/return-list-element/click", "{}")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
     Call pAssertWrittenCell(Assert, ws_stub, 6, 1, "T-002")
     Call pAssertWrittenCell(Assert, ws_stub, 6, 2, G_WEB_STATUS_OK)
@@ -175,12 +175,12 @@ Public Sub Test_WebCollectionRunner_‰‰ñƒy[ƒW0Œ‚È‚çûWi’»‚ğŠJn‚µ‚È‚¢(ByVal 
     tool_settings.ExistingRowMode = G_WEB_ROW_MODE_SKIP_EXISTING
     tool_settings.TimeoutSeconds = 1
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -203,17 +203,17 @@ Public Sub Test_WebCollectionRunner_‰‰ñƒy[ƒW0Œ‚È‚çûWi’»‚ğŠJn‚µ‚È‚¢(ByVal 
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
     Set ProgStat = New ProgressStatus
     Application.StatusBar = False
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     Dim runner As WebCollectionRunner
-    Set runner = New_WebCollectionRunner(lifecycle, tool_settings)
+    Set runner = New_WebCollectionRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
@@ -261,12 +261,12 @@ Public Sub Test_WebCollectionRunner_Šù‘¶ERRORs‚ªğŒ•sˆê’v‚È‚çŠù‘¶s‚ğXV‚¹‚¸
     tool_settings.OutputConditionExpression = "[”»’è] == ""‘ÎÛ"""
     tool_settings.TimeoutSeconds = 1
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -306,16 +306,16 @@ Public Sub Test_WebCollectionRunner_Šù‘¶ERRORs‚ªğŒ•sˆê’v‚È‚çŠù‘¶s‚ğXV‚¹‚¸
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
     Set ProgStat = Nothing
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     Dim runner As WebCollectionRunner
-    Set runner = New_WebCollectionRunner(lifecycle, tool_settings)
+    Set runner = New_WebCollectionRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
@@ -332,7 +332,7 @@ Public Sub Test_WebCollectionRunner_Šù‘¶ERRORs‚ªğŒ•sˆê’v‚È‚çŠù‘¶s‚ğXV‚¹‚¸
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/element/return-list-element/click", "{}")
     Assert.EqualsNumeric 0, ws_stub.Store.GetCallCount("WriteCell", New_RangeBounds(Row:=2, Column:=1, Sheet:="output"))
     Assert.EqualsNumeric 0, ws_stub.Store.GetCallCount("WriteCell", New_RangeBounds(Row:=6, Column:=2, Sheet:="output"))
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -368,13 +368,13 @@ Public Sub Test_WebCollectionRunner_Ÿƒy[ƒW‚ª‚ ‚ê‚Î‘Sƒy[ƒW‚ğ„‰ñ‚·‚é(ByVal Ass
     tool_settings.ExistingRowMode = G_WEB_ROW_MODE_SKIP_EXISTING
     tool_settings.TimeoutSeconds = 1
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("NextPage", "#next-link", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("NextPage", "#next-link", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -405,16 +405,16 @@ Public Sub Test_WebCollectionRunner_Ÿƒy[ƒW‚ª‚ ‚ê‚Î‘Sƒy[ƒW‚ğ„‰ñ‚·‚é(ByVal Ass
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
     Set ProgStat = New ProgressStatus
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     Dim runner As WebCollectionRunner
-    Set runner = New_WebCollectionRunner(lifecycle, tool_settings)
+    Set runner = New_WebCollectionRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
@@ -435,7 +435,7 @@ Public Sub Test_WebCollectionRunner_Ÿƒy[ƒW‚ª‚ ‚ê‚Î‘Sƒy[ƒW‚ğ„‰ñ‚·‚é(ByVal Ass
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/element/next-link-element/click", "{}")
     Assert.EqualsNumeric 0, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/execute/sync", "{""script"":""openDetail(0)"",""args"":[]}")
     Assert.EqualsNumeric 0, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/execute/sync", "{""script"":""openDetail(1)"",""args"":[]}")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -471,13 +471,13 @@ Public Sub Test_WebCollectionRunner_Ÿƒy[ƒW‘€ìŒã‚Éæ“ª‘ÎÛID‚ª•Ï‚í‚ç‚È‚¯‚ê‚Î’†
     tool_settings.ExistingRowMode = G_WEB_ROW_MODE_SKIP_EXISTING
     tool_settings.TimeoutSeconds = 0
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("NextPage", "#next-link", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="openDetail({{index}})", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("NextPage", "#next-link", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -506,16 +506,16 @@ Public Sub Test_WebCollectionRunner_Ÿƒy[ƒW‘€ìŒã‚Éæ“ª‘ÎÛID‚ª•Ï‚í‚ç‚È‚¯‚ê‚Î’†
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
     Set ProgStat = New ProgressStatus
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     Dim runner As WebCollectionRunner
-    Set runner = New_WebCollectionRunner(lifecycle, tool_settings)
+    Set runner = New_WebCollectionRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -529,7 +529,7 @@ Public Sub Test_WebCollectionRunner_Ÿƒy[ƒW‘€ìŒã‚Éæ“ª‘ÎÛID‚ª•Ï‚í‚ç‚È‚¯‚ê‚Î’†
     Assert.IsFalse ProgStat.IsComplete
     Assert.Equals False, CBool(Application.StatusBar)
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/element/next-link-element/click", "{}")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 

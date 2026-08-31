@@ -266,13 +266,13 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationChainÇ≈äeëÄçÏå„Ç…Wa
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenOther", "#open-other", WaitSelector:="#other-ready"))
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenOther", "#open-other", WaitSelector:="#other-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
 
     Dim operation_chain As TransitionOperationChain
-    Set operation_chain = New_TransitionOperationChain(operations)
+    Set operation_chain = New_TransitionOperationChain(transition_operations)
 
     Call session_client.CreateSession
     Err.Clear
@@ -316,14 +316,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ClickÇóDêÊÇ∑ÇÈ(B
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", "#open-list", ActionScript:="openList()", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", "#open-list", ActionScript:="openList()", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -368,14 +368,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ActionInnerTextàÍ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóó Ç äJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóó Ç äJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -421,14 +421,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ActionInnerTextàÍ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóóÇäJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóóÇäJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
@@ -474,14 +474,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ActionInnerTextàÍ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóó Ç äJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóó Ç äJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
@@ -515,14 +515,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ActionInnerTextÇÕ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="abc ÉA Ç†", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="abc ÉA Ç†", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
@@ -563,14 +563,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ActionInnerTextëŒ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóóÇäJÇ≠", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóóÇäJÇ≠", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -625,14 +625,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈Frameì‡ActionInne
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenDetail", "iframe[name='right'] >> .menu-button", ActionInnerText:="è⁄ç◊ÇäJÇ≠", WaitSelector:="#target-id")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenDetail", "iframe[name='right'] >> .menu-button", ActionInnerText:="è⁄ç◊ÇäJÇ≠", WaitSelector:="#target-id")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -677,14 +677,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ActionInnerTextäm
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóóÇäJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", ".menu-button", ActionInnerText:="àÍóóÇäJÇ≠", ActionScript:="fallback()", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -729,14 +729,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈Frameì‡óvëfÇClic
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", "iframe[name='right'] >> #list tbody tr:first-child td:nth-child(2)", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", "iframe[name='right'] >> #list tbody tr:first-child td:nth-child(2)", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -775,14 +775,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈í èÌClickïsî\Ç»ÇÁ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -814,14 +814,14 @@ Public Sub Test_WebDriverSessionClient_RunTransitionOperationÇ≈ScriptOnlyÇé¿çsÇ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim operation As TransitionOperation
-    Set operation = New_TransitionOperation("OpenList", "", ActionScript:="openList()", WaitSelector:="#list-ready")
+    Dim transition_operation As TransitionOperation
+    Set transition_operation = New_TransitionOperation("OpenList", "", ActionScript:="openList()", WaitSelector:="#list-ready")
 
     Call session_client.CreateSession
     Err.Clear
 
     ' --- Act ---
-    Call session_client.RunTransitionOperation(operation)
+    Call session_client.RunTransitionOperation(transition_operation)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub

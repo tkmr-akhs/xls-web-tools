@@ -18,10 +18,10 @@ Public Sub Test_TransitionOperationResolver_ˆê——‘JˆÚ‘€ì–¼‚ð‘å•¶Žš¬•¶Žš‚ð‹æ•Ê‚¹
     Set tool_settings = New ToolSettingsTestDouble
     tool_settings.ListTransitionOperationName = "openlist"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)
@@ -49,11 +49,11 @@ Public Sub Test_TransitionOperationResolver_ˆê——‘JˆÚ‘€ìƒ`ƒF[ƒ“‚ð‡‚É‰ðŒˆ‚·‚é(B
     Set tool_settings = New ToolSettingsTestDouble
     tool_settings.ListTransitionOperationName = "OpenOther >> OpenList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenOther", "#open-other", WaitSelector:="#other-ready"))
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenOther", "#open-other", WaitSelector:="#other-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)
@@ -79,14 +79,14 @@ Public Sub Test_TransitionOperationResolver_Ú×‘JˆÚ‘€ì‚Å‚ÍIndexƒeƒ“ƒvƒŒ[ƒg‚ð’
     Set tool_settings = New ToolSettingsTestDouble
     tool_settings.DetailTransitionOperationName = "OpenDetail"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation( _
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation( _
             "OpenDetail", _
             "#list tr:nth-child({{rowNumber}}) a", _
             ActionScript:="openDetail({{index}})", _
             WaitSelector:="#detail-{{rowNumber}}"))
-    Set tool_settings.TransitionOperations = operations
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)
@@ -115,18 +115,18 @@ Public Sub Test_TransitionOperationResolver_Ú×‘JˆÚ‘€ìƒ`ƒF[ƒ“‚Ì‘S—v‘f‚ÉIndexƒ
     Set tool_settings = New ToolSettingsTestDouble
     tool_settings.DetailTransitionOperationName = "OpenMenu >> OpenDetail"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation( _
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation( _
             "OpenMenu", _
             "#list tr:nth-child({{rowNumber}}) .menu", _
             WaitSelector:="#menu-{{index}}"))
-    Call operations.Add(New_TransitionOperation( _
+    Call transition_operations.Add(New_TransitionOperation( _
             "OpenDetail", _
             "#list tr:nth-child({{rowNumber}}) a", _
             ActionScript:="openDetail({{index}})", _
             WaitSelector:="#detail-{{rowNumber}}"))
-    Set tool_settings.TransitionOperations = operations
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)
@@ -154,13 +154,13 @@ Public Sub Test_TransitionOperationResolver_•œ‹A‚ÆŽŸƒy[ƒW‚Ì‘JˆÚ‘€ìƒ`ƒF[ƒ“‚ð‰ð
     tool_settings.ReturnToListOperationName = "CloseDetail >> BackToList"
     tool_settings.NextPageOperationName = "OpenPager >> NextPage"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("CloseDetail", "#close-detail", WaitSelector:="#closed"))
-    Call operations.Add(New_TransitionOperation("BackToList", "#back-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenPager", "#open-pager", WaitSelector:="#pager-ready"))
-    Call operations.Add(New_TransitionOperation("NextPage", "#next-page", WaitSelector:="#next-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("CloseDetail", "#close-detail", WaitSelector:="#closed"))
+    Call transition_operations.Add(New_TransitionOperation("BackToList", "#back-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenPager", "#open-pager", WaitSelector:="#pager-ready"))
+    Call transition_operations.Add(New_TransitionOperation("NextPage", "#next-page", WaitSelector:="#next-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)
@@ -190,10 +190,10 @@ Public Sub Test_TransitionOperationResolver_“¯‚¶‘€ì–¼‚ðƒ`ƒF[ƒ““à‚Å•¡”‰ñŽg‚¦‚é
     Set tool_settings = New ToolSettingsTestDouble
     tool_settings.ListTransitionOperationName = "OpenList >> OpenList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)
@@ -217,11 +217,11 @@ Public Sub Test_TransitionOperationResolver_‹ó—v‘f‚È‚çÝ’è€–Ú–¼‚Æƒ`ƒF[ƒ“•¶Žš—ñ
     Set tool_settings = New ToolSettingsTestDouble
     tool_settings.ListTransitionOperationName = "OpenOther >>  >> OpenList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenOther", "#open-other", WaitSelector:="#other-ready"))
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenOther", "#open-other", WaitSelector:="#other-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)
@@ -244,10 +244,10 @@ Public Sub Test_TransitionOperationResolver_‹æØ‚è•¶Žš‚ðŠÜ‚Þ‘€ì–¼‚È‚çÝ’è€–Ú–¼
     Set tool_settings = New ToolSettingsTestDouble
     tool_settings.ListTransitionOperationName = "Open >> List"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("Open >> List", "#bad-name", WaitSelector:="#bad-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("Open >> List", "#bad-name", WaitSelector:="#bad-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim resolver As TransitionOperationResolver
     Set resolver = New_TransitionOperationResolver(tool_settings)

@@ -28,24 +28,24 @@ Public Sub Test_WebDriverSessionLifecycle_StartSessionÇ©ÇÁFinishSessionÇ‹Ç≈í Ç∑(
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
-    actual_session_id = lifecycle.StartSession()
-    Call lifecycle.FinishSession
+    actual_session_id = session_lifecycle.StartSession()
+    Call session_lifecycle.FinishSession
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
     Assert.Equals "abc", actual_session_id
-    Assert.Equals "", lifecycle.SessionId
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
-    Assert.IsFalse process.IsRunning
+    Assert.Equals "", session_lifecycle.SessionId
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsFalse driver_process.IsRunning
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session", pCreateSessionBody(True))
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
@@ -69,21 +69,21 @@ Public Sub Test_WebDriverSessionLifecycle_StartSessionëOÇ…BrowserProfilePathÇÃë∂
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
-    actual_session_id = lifecycle.StartSession()
+    actual_session_id = session_lifecycle.StartSession()
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
     Assert.Equals "abc", actual_session_id
     Assert.EqualsNumeric 1, fs_stub.Store.GetCallCount("IsDirectory", "C:\Profile")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session", pCreateSessionBody(True))
 End Sub
 Public Sub Test_WebDriverSessionLifecycle_BrowserProfilePathïsë∂ç›Ç≈çÏê¨ë±çsÇ»ÇÁçƒãAçÏê¨ÇµÇƒSessionÇäJénÇ∑ÇÈ(ByVal Assert As UnitTestAssert)
@@ -110,16 +110,16 @@ Public Sub Test_WebDriverSessionLifecycle_BrowserProfilePathïsë∂ç›Ç≈çÏê¨ë±çsÇ»ÇÁ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
-    Set lifecycle.BrowserProfilePrompt = prompt
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
+    Set session_lifecycle.BrowserProfilePrompt = prompt
 
     ' --- Act ---
     Dim actual_session_id As String
-    actual_session_id = lifecycle.StartSession()
+    actual_session_id = session_lifecycle.StartSession()
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -127,7 +127,7 @@ Public Sub Test_WebDriverSessionLifecycle_BrowserProfilePathïsë∂ç›Ç≈çÏê¨ë±çsÇ»ÇÁ
     Assert.EqualsNumeric 1, fs_stub.Store.GetCallCount("IsDirectory", "C:\Missing\Profile")
     Assert.EqualsNumeric 1, prompt.Store.GetCallCount("ConfirmCreateDirectory", "C:\Missing\Profile")
     Assert.EqualsNumeric 1, fs_stub.Store.GetCallCount("CreateDirectory", "C:\Missing\Profile", False, True)
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session", pCreateSessionBodyWithProfile("C:\Missing\Profile", True))
 End Sub
 Public Sub Test_WebDriverSessionLifecycle_BrowserProfilePathïsë∂ç›Ç≈çÏê¨íÜé~Ç»ÇÁSessionÇäJénÇµÇ»Ç¢(ByVal Assert As UnitTestAssert)
@@ -152,25 +152,25 @@ Public Sub Test_WebDriverSessionLifecycle_BrowserProfilePathïsë∂ç›Ç≈çÏê¨íÜé~Ç»ÇÁ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
-    Set lifecycle.BrowserProfilePrompt = prompt
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
+    Set session_lifecycle.BrowserProfilePrompt = prompt
 
     ' --- Act ---
     Dim actual_session_id As String
-    actual_session_id = lifecycle.StartSession()
+    actual_session_id = session_lifecycle.StartSession()
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
     Assert.Equals "", actual_session_id
-    Assert.Equals "", lifecycle.SessionId
+    Assert.Equals "", session_lifecycle.SessionId
     Assert.EqualsNumeric 1, fs_stub.Store.GetCallCount("IsDirectory", "C:\Missing\Profile")
     Assert.EqualsNumeric 1, prompt.Store.GetCallCount("ConfirmCreateDirectory", "C:\Missing\Profile")
     Assert.EqualsNumeric 0, fs_stub.Store.GetCallCount("CreateDirectory", "C:\Missing\Profile", False, True)
-    Assert.EqualsNumeric 0, process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 0, driver_process.Store.GetCallCount("Start")
     Assert.EqualsNumeric 0, client_double.Store.GetCallCountAll("Execute")
 End Sub
 Public Sub Test_WebDriverSessionLifecycle_CleanupAfterErrorÇÕHeadlessÇ»ÇÁSessionÇ∆ProcessÇï¬Ç∂ÇÈ(ByVal Assert As UnitTestAssert)
@@ -191,25 +191,25 @@ Public Sub Test_WebDriverSessionLifecycle_CleanupAfterErrorÇÕHeadlessÇ»ÇÁSession
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
-    Call lifecycle.StartSession
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Call session_lifecycle.StartSession
     Err.Clear
 
     ' --- Act ---
     Dim err_desc As String
     err_desc = "é∏îsÇµÇ‹ÇµÇΩÅB"
-    Call lifecycle.CleanupAfterError(err_desc)
+    Call session_lifecycle.CleanupAfterError(err_desc)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
     Assert.Equals "é∏îsÇµÇ‹ÇµÇΩÅB", err_desc
-    Assert.Equals "", lifecycle.SessionId
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
-    Assert.IsFalse process.IsRunning
+    Assert.Equals "", session_lifecycle.SessionId
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsFalse driver_process.IsRunning
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -230,26 +230,26 @@ Public Sub Test_WebDriverSessionLifecycle_â¬éãÉuÉâÉEÉUêfífíÜÇÃÉGÉâÅ[Ç≈ÇÕSessionÇ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
-    Call lifecycle.StartSession
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Call session_lifecycle.StartSession
     Err.Clear
 
     ' --- Act ---
     Dim err_desc As String
     err_desc = "é∏îsÇµÇ‹ÇµÇΩÅB"
-    Call lifecycle.CleanupAfterError(err_desc)
+    Call session_lifecycle.CleanupAfterError(err_desc)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
     Assert.IsTrue 0 < InStr(1, err_desc, "ÉuÉâÉEÉUÇécÇµÇ‹ÇµÇΩ", vbTextCompare)
-    Assert.Equals "abc", lifecycle.SessionId
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
-    Assert.EqualsNumeric 0, process.Store.GetCallCount("StopProcess")
-    Assert.IsTrue process.IsRunning
+    Assert.Equals "abc", session_lifecycle.SessionId
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 0, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsTrue driver_process.IsRunning
     Assert.EqualsNumeric 0, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -270,14 +270,14 @@ Public Sub Test_WebDriverSessionLifecycle_StartSessioné∏îså„ÇÃCleanupÇÕProcessÇ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
     ' --- Act ---
-    Call lifecycle.StartSession
+    Call session_lifecycle.StartSession
 
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
@@ -285,13 +285,13 @@ Public Sub Test_WebDriverSessionLifecycle_StartSessioné∏îså„ÇÃCleanupÇÕProcessÇ
 
     Dim err_desc As String
     err_desc = "é∏îsÇµÇ‹ÇµÇΩÅB"
-    Call lifecycle.CleanupAfterError(err_desc)
+    Call session_lifecycle.CleanupAfterError(err_desc)
 
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
-    Assert.Equals "", lifecycle.SessionId
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
-    Assert.IsFalse process.IsRunning
+    Assert.Equals "", session_lifecycle.SessionId
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsFalse driver_process.IsRunning
     Assert.EqualsNumeric 0, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 

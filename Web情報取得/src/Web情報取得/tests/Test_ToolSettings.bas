@@ -407,17 +407,17 @@ Public Sub Test_ToolSettings_SettingsƒV[ƒg_‘€ì’è‹`‚Æ—ñ’è‹`‚ğ“Ç‚İæ‚é(ByVal Ass
     Set tool_settings = pNewToolSettings()
 
     ' --- Act ---
-    Dim operations As ObjectList
-    Set operations = tool_settings.TransitionOperations
+    Dim transition_operations As ObjectList
+    Set transition_operations = tool_settings.TransitionOperations
 
     Dim detail_columns As ObjectList
     Set detail_columns = tool_settings.DetailColumnDefinitions
 
     Dim first_operation As TransitionOperation
-    Set first_operation = operations.Item(0)
+    Set first_operation = transition_operations.Item(0)
 
     Dim second_operation As TransitionOperation
-    Set second_operation = operations.Item(1)
+    Set second_operation = transition_operations.Item(1)
 
     Dim first_column As DetailColumnDefinition
     Set first_column = detail_columns.Item(0)
@@ -427,7 +427,7 @@ Public Sub Test_ToolSettings_SettingsƒV[ƒg_‘€ì’è‹`‚Æ—ñ’è‹`‚ğ“Ç‚İæ‚é(ByVal Ass
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
-    Assert.EqualsNumeric 2, operations.Count
+    Assert.EqualsNumeric 2, transition_operations.Count
     Assert.Equals "OpenList", first_operation.OperationName
     Assert.Equals "#open-list", first_operation.ActionSelector
     Assert.Equals "ˆê——‚ğŠJ‚­", first_operation.ActionInnerText
@@ -615,8 +615,8 @@ Public Sub Test_ToolSettings_SettingsƒV[ƒg_ActionInnerText‚ÅActionSelector–¢İ’
     Set tool_settings = pNewToolSettings()
 
     ' --- Act ---
-    Dim operations As ObjectList
-    Set operations = tool_settings.TransitionOperations
+    Dim transition_operations As ObjectList
+    Set transition_operations = tool_settings.TransitionOperations
 
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description

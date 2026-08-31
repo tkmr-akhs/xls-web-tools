@@ -175,8 +175,8 @@ Public Function BuildDependentDefinitionsByNames( _
         Err.Raise Number:=vbObjectError + 1, Source:=C_SOURCE & ".BuildDependentDefinitionsByNames", Description:="TargetColumnNames は必須です。"
     End If
 
-    Dim needed() As Boolean
-    If 0 < pDefinitions.Count Then ReDim needed(0 To pDefinitions.Count - 1)
+    Dim needed_flags() As Boolean
+    If 0 < pDefinitions.Count Then ReDim needed_flags(0 To pDefinitions.Count - 1)
 
     Dim target_idx As Long
     For target_idx = 0 To TargetColumnNames.Count - 1
@@ -188,7 +188,7 @@ Public Function BuildDependentDefinitionsByNames( _
         If def_idx < 0 Then
             Err.Raise Number:=vbObjectError + 1, Source:=C_SOURCE & ".BuildDependentDefinitionsByNames", Description:="依存列が未定義の OutputColumnName を参照しています。(" & target_name & ")"
         End If
-        Call pMarkDependentDefinition(def_idx, needed)
+        Call pMarkDependentDefinition(def_idx, needed_flags)
     Next target_idx
 
     Dim result_value As ObjectList
@@ -196,7 +196,7 @@ Public Function BuildDependentDefinitionsByNames( _
 
     Dim result_idx As Long
     For result_idx = 0 To pDefinitions.Count - 1
-        If needed(result_idx) Then
+        If needed_flags(result_idx) Then
             Dim src_def As DetailColumnDefinition
             Set src_def = pDefinitions.Item(result_idx)
             Call result_value.Add(pCopyDefinition(src_def, OptionalExtraction, IgnoreDerivedBlankMode))

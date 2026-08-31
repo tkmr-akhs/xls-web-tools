@@ -26,23 +26,23 @@ Public Sub RunDiagnostic_Click()
 
     On Error GoTo ON_ERROR
 
-    Dim settings As IToolSettings
-    Set settings = New ToolSettings
+    Dim web_tool_settings As IToolSettings
+    Set web_tool_settings = New ToolSettings
 
     Dim web_driver_client As WebDriverClient
-    Set web_driver_client = New_WebDriverClient(settings)
+    Set web_driver_client = New_WebDriverClient(web_tool_settings)
 
     Dim session_client As WebDriverSessionClient
-    Set session_client = New_WebDriverSessionClient(web_driver_client, settings)
+    Set session_client = New_WebDriverSessionClient(web_driver_client, web_tool_settings)
 
-    Dim process As WebDriverProcess
-    Set process = New_WebDriverProcess(New_WebDriverPortProbe())
+    Dim driver_process As WebDriverProcess
+    Set driver_process = New_WebDriverProcess(New_WebDriverPortProbe())
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, web_tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, web_tool_settings)
 
     Dim session_id As String
     session_id = runner.Run
@@ -97,23 +97,23 @@ Public Sub Collect_Click()
 
     ' ==== é¿èàóù ========
 
-    Dim settings As IToolSettings
-    Set settings = New ToolSettings
+    Dim web_tool_settings As IToolSettings
+    Set web_tool_settings = New ToolSettings
 
     Dim web_driver_client As WebDriverClient
-    Set web_driver_client = New_WebDriverClient(settings)
+    Set web_driver_client = New_WebDriverClient(web_tool_settings)
 
     Dim session_client As WebDriverSessionClient
-    Set session_client = New_WebDriverSessionClient(web_driver_client, settings)
+    Set session_client = New_WebDriverSessionClient(web_driver_client, web_tool_settings)
 
-    Dim process As WebDriverProcess
-    Set process = New_WebDriverProcess(New_WebDriverPortProbe())
+    Dim driver_process As WebDriverProcess
+    Set driver_process = New_WebDriverProcess(New_WebDriverPortProbe())
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, web_tool_settings)
 
     Dim runner As WebCollectionRunner
-    Set runner = New_WebCollectionRunner(lifecycle, settings)
+    Set runner = New_WebCollectionRunner(session_lifecycle, web_tool_settings)
 
     Dim session_id As String
     session_id = runner.Run

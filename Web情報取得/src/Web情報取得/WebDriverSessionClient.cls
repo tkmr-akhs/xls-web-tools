@@ -554,10 +554,10 @@ Public Sub RunTransitionOperationChain(ByVal OperationChain As TransitionOperati
 
     Dim operation_idx As Long
     For operation_idx = 0 To OperationChain.Count - 1
-        Dim operation As TransitionOperation
-        Set operation = OperationChain.Item(operation_idx)
-        Call RunTransitionOperation(operation)
-        Call WaitForSelector(operation.WaitSelector)
+        Dim transition_operation As TransitionOperation
+        Set transition_operation = OperationChain.Item(operation_idx)
+        Call RunTransitionOperation(transition_operation)
+        Call WaitForSelector(transition_operation.WaitSelector)
     Next operation_idx
 End Sub
 

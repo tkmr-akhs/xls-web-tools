@@ -18,12 +18,12 @@ Public Sub Test_WebDriverClient_TestDouble_WebDriverÉRÉ}ÉìÉhÇç∑Çµë÷Ç¶ÇÁÇÍÇÈ(ByV
     Set client_double = New WebDriverClientTestDouble
     Call client_double.Store.SetReturn("Execute", "{""value"":{""sessionId"":""abc""}}", "POST", "/session", "{""capabilities"":{}}")
 
-    Dim client As IWebDriverClient
-    Set client = client_double
+    Dim driver_client As IWebDriverClient
+    Set driver_client = client_double
 
     ' --- Act ---
     Dim actual_response As String
-    actual_response = client.Execute("POST", "/session", "{""capabilities"":{}}")
+    actual_response = driver_client.Execute("POST", "/session", "{""capabilities"":{}}")
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub

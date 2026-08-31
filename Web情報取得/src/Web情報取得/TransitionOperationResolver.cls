@@ -67,15 +67,15 @@ Private Function pResolveIndexedTransitionOperationChain( _
     Dim base_chain As TransitionOperationChain
     Set base_chain = pResolveTransitionOperationChain(OperationChainText, SettingItemName)
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
 
     Dim operation_idx As Long
     For operation_idx = 0 To base_chain.Count - 1
         Dim base_operation As TransitionOperation
         Set base_operation = base_chain.Item(operation_idx)
 
-        Call operations.Add(New_TransitionOperation( _
+        Call transition_operations.Add(New_TransitionOperation( _
                 base_operation.OperationName, _
                 pIndexTemplate.Apply(base_operation.ActionSelector, ItemIndex), _
                 ActionInnerText:=base_operation.ActionInnerText, _
@@ -83,7 +83,7 @@ Private Function pResolveIndexedTransitionOperationChain( _
                 WaitSelector:=pIndexTemplate.Apply(base_operation.WaitSelector, ItemIndex)))
     Next operation_idx
 
-    Set pResolveIndexedTransitionOperationChain = New_TransitionOperationChain(operations)
+    Set pResolveIndexedTransitionOperationChain = New_TransitionOperationChain(transition_operations)
 End Function
 
 '* 一覧画面へ戻る画面遷移操作チェーンを解決します。
@@ -116,8 +116,8 @@ Private Function pResolveTransitionOperationChain( _
                 "OperationName に >> は使用できません。")
     End If
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
 
     Dim operation_names As Variant
     operation_names = Split(OperationChainText, C_CHAIN_DELIMITER)
@@ -144,10 +144,10 @@ Private Function pResolveTransitionOperationChain( _
                     "TransitionOperations に OperationName が見つかりません。")
         End If
 
-        Call operations.Add(target_operation)
+        Call transition_operations.Add(target_operation)
     Next operation_idx
 
-    Set pResolveTransitionOperationChain = New_TransitionOperationChain(operations)
+    Set pResolveTransitionOperationChain = New_TransitionOperationChain(transition_operations)
 End Function
 
 Private Function pContainsChainDelimiter(ByVal OperationName As String) As Boolean
@@ -155,13 +155,13 @@ Private Function pContainsChainDelimiter(ByVal OperationName As String) As Boole
 End Function
 
 Private Function pHasTransitionOperationName(ByVal OperationName As String) As Boolean
-    Dim operations As ObjectList
-    Set operations = pSettings.TransitionOperations
+    Dim transition_operations As ObjectList
+    Set transition_operations = pSettings.TransitionOperations
 
     Dim operation_idx As Long
-    For operation_idx = 0 To operations.Count - 1
+    For operation_idx = 0 To transition_operations.Count - 1
         Dim target_operation As TransitionOperation
-        Set target_operation = operations.Item(operation_idx)
+        Set target_operation = transition_operations.Item(operation_idx)
         If StrComp(target_operation.OperationName, OperationName, vbTextCompare) = 0 Then
             pHasTransitionOperationName = True
             Exit Function
@@ -172,13 +172,13 @@ Private Function pHasTransitionOperationName(ByVal OperationName As String) As B
 End Function
 
 Private Function pFindTransitionOperation(ByVal OperationName As String) As TransitionOperation
-    Dim operations As ObjectList
-    Set operations = pSettings.TransitionOperations
+    Dim transition_operations As ObjectList
+    Set transition_operations = pSettings.TransitionOperations
 
     Dim operation_idx As Long
-    For operation_idx = 0 To operations.Count - 1
+    For operation_idx = 0 To transition_operations.Count - 1
         Dim target_operation As TransitionOperation
-        Set target_operation = operations.Item(operation_idx)
+        Set target_operation = transition_operations.Item(operation_idx)
         If StrComp(target_operation.OperationName, OperationName, vbTextCompare) = 0 Then
             Set pFindTransitionOperation = target_operation
             Exit Function

@@ -27,12 +27,12 @@ Public Sub Test_WebNavDiagnosticRunner_StartUrl‚©‚çˆê——‰æ–Ê“’B‚Ü‚Åf’f‚·‚é(ByVa
     tool_settings.TargetIdSelector = "#list-ready"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""]}}}}"
@@ -60,16 +60,16 @@ Public Sub Test_WebNavDiagnosticRunner_StartUrl‚©‚çˆê——‰æ–Ê“’B‚Ü‚Åf’f‚·‚é(ByVa
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
     Set ProgStat = New ProgressStatus
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
@@ -78,9 +78,9 @@ Public Sub Test_WebNavDiagnosticRunner_StartUrl‚©‚çˆê——‰æ–Ê“’B‚Ü‚Åf’f‚·‚é(ByVa
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
     Assert.Equals "abc", actual_session_id
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
-    Assert.IsFalse process.IsRunning
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsFalse driver_process.IsRunning
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/url", "{""url"":""https://example.test/start""}")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/element", auth_find_body)
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/element", open_list_find_body)
@@ -111,12 +111,12 @@ Public Sub Test_WebNavDiagnosticRunner_æ“ªˆê——€–Ú‚©‚çÚ×ƒy[ƒW‚Ö“ü‚è‘ÎÛID‚ğ’
     tool_settings.TargetIdSelector = "#target-id"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""]}}}}"
@@ -158,14 +158,14 @@ Public Sub Test_WebNavDiagnosticRunner_æ“ªˆê——€–Ú‚©‚çÚ×ƒy[ƒW‚Ö“ü‚è‘ÎÛID‚ğ’
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
@@ -225,12 +225,12 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚ÉŠî‚Ã‚­f’fo—Ís‚ğ‘‚­(ByVal 
     tool_settings.DownloadRootPath = "D:\Root"
     tool_settings.DownloadLinkSelector = "#download"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -293,14 +293,14 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚ÉŠî‚Ã‚­f’fo—Ís‚ğ‘‚­(ByVal 
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -350,12 +350,12 @@ Public Sub Test_WebNavDiagnosticRunner_”h¶—ñƒwƒbƒ_[‚É’Pƒ—ñQÆ‚Ì’l‚ğ‘‚­(ByVa
     tool_settings.TargetIdSelector = "#target-id"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -385,14 +385,14 @@ Public Sub Test_WebNavDiagnosticRunner_”h¶—ñƒwƒbƒ_[‚É’Pƒ—ñQÆ‚Ì’l‚ğ‘‚­(ByVa
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -439,12 +439,12 @@ Public Sub Test_WebNavDiagnosticRunner_”h¶—ñ‚ğo—Í‘ÎÛğŒ‚ÅQÆ‚µ‚Äf’fs‚ğ‘‚
     tool_settings.ReturnToListOperationName = "ReturnToList"
     tool_settings.OutputConditionExpression = "[Ì—p—ñ] == ""‘ÎÛ"""
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -476,14 +476,14 @@ Public Sub Test_WebNavDiagnosticRunner_”h¶—ñ‚ğo—Í‘ÎÛğŒ‚ÅQÆ‚µ‚Äf’fs‚ğ‘‚
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -531,12 +531,12 @@ Public Sub Test_WebNavDiagnosticRunner_ğŒˆê’vŒã‚Ì”h¶—ñBlankMode‹ó—“‚ÍERRORs‚
     tool_settings.ReturnToListOperationName = "ReturnToList"
     tool_settings.OutputConditionExpression = "[”»’è] == ""‘ÎÛ"""
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -566,14 +566,14 @@ Public Sub Test_WebNavDiagnosticRunner_ğŒˆê’vŒã‚Ì”h¶—ñBlankMode‹ó—“‚ÍERRORs‚
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -620,12 +620,12 @@ Public Sub Test_WebNavDiagnosticRunner_ğŒ•sˆê’v‚È‚ç”h¶—ñBlankMode‹ó—“‚Å‚àERRO
     tool_settings.ReturnToListOperationName = "ReturnToList"
     tool_settings.OutputConditionExpression = "[”»’è] == ""‘ÎÛ"""
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -655,14 +655,14 @@ Public Sub Test_WebNavDiagnosticRunner_ğŒ•sˆê’v‚È‚ç”h¶—ñBlankMode‹ó—“‚Å‚àERRO
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -707,12 +707,12 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚È‚µ‚Å‚àŒÅ’èŠÇ——ñ‚¾‚¯‚Ìf’fs‚
     tool_settings.TargetIdSelector = "#target-id"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""]}}}}"
@@ -736,14 +736,14 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚È‚µ‚Å‚àŒÅ’èŠÇ——ñ‚¾‚¯‚Ìf’fs‚
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -804,12 +804,12 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚È‚µ‚ÅDownloadRequired‚È‚çNO_FI
     tool_settings.DownloadRootPath = "D:\Root"
     tool_settings.DownloadLinkSelector = "#download"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""],""prefs"":{""download.default_directory"":""C:\\Temp\\xls-web-tools_tmp123.tmp"",""download.prompt_for_download"":false,""download.directory_upgrade"":true}}}}}"
@@ -835,14 +835,14 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚È‚µ‚ÅDownloadRequired‚È‚çNO_FI
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -914,12 +914,12 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚È‚µ‚Å‚àƒ_ƒEƒ“ƒ[ƒhÏ‚İƒtƒ@ƒCƒ
     tool_settings.DownloadRootPath = "D:\Root"
     tool_settings.DownloadLinkSelector = "#download"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""],""prefs"":{""download.default_directory"":""C:\\Temp\\xls-web-tools_tmp123.tmp"",""download.prompt_for_download"":false,""download.directory_upgrade"":true}}}}}"
@@ -947,14 +947,14 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×—ñ’è‹`‚È‚µ‚Å‚àƒ_ƒEƒ“ƒ[ƒhÏ‚İƒtƒ@ƒCƒ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -1006,12 +1006,12 @@ Public Sub Test_WebNavDiagnosticRunner_ğŒ•sˆê’v‚È‚çf’fo—Ís‚ğ‘‚©‚È‚¢(ByVal 
     tool_settings.ReturnToListOperationName = "ReturnToList"
     tool_settings.OutputConditionExpression = "[”»’è] == ""‘ÎÛ"""
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -1042,14 +1042,14 @@ Public Sub Test_WebNavDiagnosticRunner_ğŒ•sˆê’v‚È‚çf’fo—Ís‚ğ‘‚©‚È‚¢(ByVal 
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
@@ -1061,7 +1061,7 @@ Public Sub Test_WebNavDiagnosticRunner_ğŒ•sˆê’v‚È‚çf’fo—Ís‚ğ‘‚©‚È‚¢(ByVal 
     Assert.IsTrue runner.IsOutputExcluded
     Assert.EqualsNumeric 0, ws_stub.Store.GetCallCount("WriteCell", New_RangeBounds(Row:=2, Column:=1, Sheet:="output"))
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "POST", "/session/abc/element/return-list-element/click", "{}")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -1099,12 +1099,12 @@ Public Sub Test_WebNavDiagnosticRunner_•K{Ú×—ñ‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍERRORs‚ğ‘
     tool_settings.TargetIdSelector = "#target-id"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim detail_defs As ObjectList
     Set detail_defs = New_ObjectList("DetailColumnDefinition")
@@ -1160,14 +1160,14 @@ Public Sub Test_WebNavDiagnosticRunner_•K{Ú×—ñ‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍERRORs‚ğ‘
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -1199,12 +1199,12 @@ Public Sub Test_WebNavDiagnosticRunner_ˆê——ã‚ÆÚ×ƒy[ƒW‚Ì‘ÎÛID•sˆê’v‚ÍƒGƒ‰[(
     tool_settings.TargetIdSelector = "#target-id"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "", ActionScript:="return true;", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""]}}}}"
@@ -1246,14 +1246,14 @@ Public Sub Test_WebNavDiagnosticRunner_ˆê——ã‚ÆÚ×ƒy[ƒW‚Ì‘ÎÛID•sˆê’v‚ÍƒGƒ‰[(
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -1261,7 +1261,7 @@ Public Sub Test_WebNavDiagnosticRunner_ˆê——ã‚ÆÚ×ƒy[ƒW‚Ì‘ÎÛID•sˆê’v‚ÍƒGƒ‰[(
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
     Assert.IsTrue 0 < InStr(1, Err.Description, "ˆê——ã‚Ì‘ÎÛID‚ÆÚ×ƒy[ƒWã‚Ì‘ÎÛID‚ªˆê’v‚µ‚Ü‚¹‚ñ", vbTextCompare)
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -1293,14 +1293,14 @@ Public Sub Test_WebNavDiagnosticRunner_‰Â‹ƒuƒ‰ƒEƒUf’f’†‚ÌƒGƒ‰[‚Å‚Íƒuƒ‰ƒEƒU‚ğ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -1308,9 +1308,9 @@ Public Sub Test_WebNavDiagnosticRunner_‰Â‹ƒuƒ‰ƒEƒUf’f’†‚ÌƒGƒ‰[‚Å‚Íƒuƒ‰ƒEƒU‚ğ
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
     Assert.IsTrue 0 < InStr(1, Err.Description, "ƒuƒ‰ƒEƒU‚ğc‚µ‚Ü‚µ‚½", vbTextCompare)
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
-    Assert.EqualsNumeric 0, process.Store.GetCallCount("StopProcess")
-    Assert.IsTrue process.IsRunning
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 0, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsTrue driver_process.IsRunning
     Assert.EqualsNumeric 0, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -1331,12 +1331,12 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×ƒy[ƒWŒã‚Éˆê——•œ‹AƒŠƒ“ƒN‚Å–ß‚é(ByVal 
     tool_settings.TargetIdSelector = "#target-id"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""]}}}}"
@@ -1383,14 +1383,14 @@ Public Sub Test_WebNavDiagnosticRunner_Ú×ƒy[ƒWŒã‚Éˆê——•œ‹AƒŠƒ“ƒN‚Å–ß‚é(ByVal 
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -1419,12 +1419,12 @@ Public Sub Test_WebNavDiagnosticRunner_ˆê——•œ‹A¸”s‚Í•œ‹A•s”\ƒGƒ‰[‚É‚·‚é(ByVal 
     tool_settings.TargetIdSelector = "#target-id"
     tool_settings.ReturnToListOperationName = "ReturnToList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Call operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
-    Call operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Call transition_operations.Add(New_TransitionOperation("OpenDetail", ".first-detail-link", WaitSelector:="#target-id"))
+    Call transition_operations.Add(New_TransitionOperation("ReturnToList", "#return-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim create_body As String
     create_body = "{""capabilities"":{""alwaysMatch"":{""browserName"":""MicrosoftEdge"",""ms:edgeOptions"":{""args"":[""--user-data-dir=C:\\Profile"",""--headless=new""]}}}}"
@@ -1470,14 +1470,14 @@ Public Sub Test_WebNavDiagnosticRunner_ˆê——•œ‹A¸”s‚Í•œ‹A•s”\ƒGƒ‰[‚É‚·‚é(ByVal 
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings, KeepVisibleBrowserOnError:=True)
 
     Dim runner As WebNavDiagnosticRunner
-    Set runner = New_WebNavDiagnosticRunner(lifecycle, tool_settings)
+    Set runner = New_WebNavDiagnosticRunner(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Call runner.Run
@@ -1486,7 +1486,7 @@ Public Sub Test_WebNavDiagnosticRunner_ˆê——•œ‹A¸”s‚Í•œ‹A•s”\ƒGƒ‰[‚É‚·‚é(ByVal 
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
     Assert.IsTrue 0 < InStr(1, Err.Description, "ˆê——‰æ–Ê‚Ö•œ‹A‚Å‚«‚Ü‚¹‚ñ", vbTextCompare)
     Assert.IsTrue 0 < InStr(1, Err.Description, "missing return link", vbTextCompare)
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 

@@ -26,18 +26,18 @@ Public Sub Test_WebDriverProcess_WebDriverÀsƒtƒ@ƒCƒ‹‚ª‚È‚¢ê‡‚Í”z’u•s‘«ƒGƒ‰[
     Dim port_probe As WebDriverPortProbeTestDouble
     Set port_probe = New WebDriverPortProbeTestDouble
 
-    Dim process As WebDriverProcess
-    Set process = New_WebDriverProcess(port_probe)
+    Dim driver_process As WebDriverProcess
+    Set driver_process = New_WebDriverProcess(port_probe)
 
     ' --- Act ---
-    Call process.Start(tool_settings)
+    Call driver_process.Start(tool_settings)
 
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
     Assert.IsTrue 0 < InStr(1, Err.Description, "”z’u", vbTextCompare)
     Assert.EqualsNumeric 1, fs_stub.Store.GetCallCount("IsFile", "C:\Missing\msedgedriver.exe")
     Assert.EqualsNumeric 0, port_probe.Store.GetCallCount("IsPortInUse", CLng(9515))
-    Assert.IsFalse process.IsRunning
+    Assert.IsFalse driver_process.IsRunning
 End Sub
 
 Public Sub Test_WebDriverProcess_“¯‚¶Port‚ªg—p’†‚Ìê‡‚Í‘¼ƒvƒƒZƒX‚ğI—¹‚¹‚¸’†’f‚·‚é(ByVal Assert As UnitTestAssert)
@@ -58,16 +58,16 @@ Public Sub Test_WebDriverProcess_“¯‚¶Port‚ªg—p’†‚Ìê‡‚Í‘¼ƒvƒƒZƒX‚ğI—¹‚¹‚¸’†’
     Set port_probe = New WebDriverPortProbeTestDouble
     Call port_probe.Store.SetReturn("IsPortInUse", True, CLng(9515))
 
-    Dim process As WebDriverProcess
-    Set process = New_WebDriverProcess(port_probe)
+    Dim driver_process As WebDriverProcess
+    Set driver_process = New_WebDriverProcess(port_probe)
 
     ' --- Act ---
-    Call process.Start(tool_settings)
+    Call driver_process.Start(tool_settings)
 
     ' --- Assert ---
     Assert.ErrorRaised 0, Err.Number, Err.Source, Err.Description
     Assert.IsTrue 0 < InStr(1, Err.Description, "g—p’†", vbTextCompare)
     Assert.EqualsNumeric 1, fs_stub.Store.GetCallCount("IsFile", "C:\Driver\msedgedriver.exe")
     Assert.EqualsNumeric 1, port_probe.Store.GetCallCount("IsPortInUse", CLng(9515))
-    Assert.IsFalse process.IsRunning
+    Assert.IsFalse driver_process.IsRunning
 End Sub

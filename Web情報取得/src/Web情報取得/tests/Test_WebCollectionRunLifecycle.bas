@@ -24,32 +24,32 @@ Public Sub Test_WebCollectionRunLifecycle_àÍóóâÊñ ìûíBå„Ç…BodyÇé¿çsÇµÇƒSessionÇ
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
-    Dim body As WebCollectionRunBodyTestDouble
-    Set body = New WebCollectionRunBodyTestDouble
+    Dim run_body_double As WebCollectionRunBodyTestDouble
+    Set run_body_double = New WebCollectionRunBodyTestDouble
 
     Set ProgStat = New ProgressStatus
 
     Dim run_lifecycle As WebCollectionRunLifecycle
-    Set run_lifecycle = New_WebCollectionRunLifecycle(lifecycle, tool_settings)
+    Set run_lifecycle = New_WebCollectionRunLifecycle(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
-    actual_session_id = run_lifecycle.Run(body)
+    actual_session_id = run_lifecycle.Run(run_body_double)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
     Assert.Equals "abc", actual_session_id
-    Assert.EqualsNumeric 1, body.Store.GetCallCount("RunAfterPreparation")
-    Assert.EqualsNumeric 0, body.Store.GetCallCount("ClearProgressAfterError")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("Start")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
-    Assert.IsFalse process.IsRunning
+    Assert.EqualsNumeric 1, run_body_double.Store.GetCallCount("RunAfterPreparation")
+    Assert.EqualsNumeric 0, run_body_double.Store.GetCallCount("ClearProgressAfterError")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsFalse driver_process.IsRunning
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
     Assert.Equals "éÊìæèÄîıíÜ", ProgStat.TaskName
     Assert.EqualsNumeric 5, ProgStat.ProcessedValue
@@ -69,23 +69,23 @@ Public Sub Test_WebCollectionRunLifecycle_Bodyé∏îséûÇÕBodyêiíªÇ∆SessionÇCleanup
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
 
-    Dim body As WebCollectionRunBodyTestDouble
-    Set body = New WebCollectionRunBodyTestDouble
-    Call body.Store.SetError("RunAfterPreparation", vbObjectError + 333, "Class Body", "body failed")
+    Dim run_body_double As WebCollectionRunBodyTestDouble
+    Set run_body_double = New WebCollectionRunBodyTestDouble
+    Call run_body_double.Store.SetError("RunAfterPreparation", vbObjectError + 333, "Class Body", "body failed")
 
     Set ProgStat = New ProgressStatus
 
     Dim run_lifecycle As WebCollectionRunLifecycle
-    Set run_lifecycle = New_WebCollectionRunLifecycle(lifecycle, tool_settings)
+    Set run_lifecycle = New_WebCollectionRunLifecycle(session_lifecycle, tool_settings)
 
     ' --- Act ---
-    Call run_lifecycle.Run(body)
+    Call run_lifecycle.Run(run_body_double)
 
     ' --- Assert ---
     If Not Assert.ErrorRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -93,9 +93,9 @@ Public Sub Test_WebCollectionRunLifecycle_Bodyé∏îséûÇÕBodyêiíªÇ∆SessionÇCleanup
     Assert.Equals "Class Body", Err.Source
     Assert.Equals "body failed", Err.Description
     Err.Clear
-    Assert.EqualsNumeric 1, body.Store.GetCallCount("ClearProgressAfterError")
-    Assert.EqualsNumeric 1, process.Store.GetCallCount("StopProcess")
-    Assert.IsFalse process.IsRunning
+    Assert.EqualsNumeric 1, run_body_double.Store.GetCallCount("ClearProgressAfterError")
+    Assert.EqualsNumeric 1, driver_process.Store.GetCallCount("StopProcess")
+    Assert.IsFalse driver_process.IsRunning
     Assert.EqualsNumeric 1, client_double.Store.GetCallCount("Execute", "DELETE", "/session/abc", "")
 End Sub
 
@@ -111,10 +111,10 @@ Public Sub Test_WebCollectionRunLifecycle_BrowserProfilePathçÏê¨íÜé~Ç»ÇÁBodyÇé¿
     tool_settings.AuthenticatedStartSelector = "#top-ready"
     tool_settings.ListTransitionOperationName = "OpenList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Set tool_settings.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Set tool_settings.TransitionOperations = transition_operations
 
     Dim fs_stub As FileSystemServiceTestDouble
     Set fs_stub = New FileSystemServiceTestDouble
@@ -131,22 +131,22 @@ Public Sub Test_WebCollectionRunLifecycle_BrowserProfilePathçÏê¨íÜé~Ç»ÇÁBodyÇé¿
     Dim session_client As WebDriverSessionClient
     Set session_client = New_WebDriverSessionClient(client_double, tool_settings)
 
-    Dim process As WebDriverProcessTestDouble
-    Set process = New WebDriverProcessTestDouble
+    Dim driver_process As WebDriverProcessTestDouble
+    Set driver_process = New WebDriverProcessTestDouble
 
-    Dim lifecycle As WebDriverSessionLifecycle
-    Set lifecycle = New_WebDriverSessionLifecycle(process, session_client, tool_settings)
-    Set lifecycle.BrowserProfilePrompt = prompt
+    Dim session_lifecycle As WebDriverSessionLifecycle
+    Set session_lifecycle = New_WebDriverSessionLifecycle(driver_process, session_client, tool_settings)
+    Set session_lifecycle.BrowserProfilePrompt = prompt
 
-    Dim body As WebCollectionRunBodyTestDouble
-    Set body = New WebCollectionRunBodyTestDouble
+    Dim run_body_double As WebCollectionRunBodyTestDouble
+    Set run_body_double = New WebCollectionRunBodyTestDouble
 
     Dim run_lifecycle As WebCollectionRunLifecycle
-    Set run_lifecycle = New_WebCollectionRunLifecycle(lifecycle, tool_settings)
+    Set run_lifecycle = New_WebCollectionRunLifecycle(session_lifecycle, tool_settings)
 
     ' --- Act ---
     Dim actual_session_id As String
-    actual_session_id = run_lifecycle.Run(body)
+    actual_session_id = run_lifecycle.Run(run_body_double)
 
     ' --- Assert ---
     If Not Assert.ErrorNotRaised(0, Err.Number, Err.Source, Err.Description) Then Exit Sub
@@ -154,10 +154,10 @@ Public Sub Test_WebCollectionRunLifecycle_BrowserProfilePathçÏê¨íÜé~Ç»ÇÁBodyÇé¿
     Assert.EqualsNumeric 1, fs_stub.Store.GetCallCount("IsDirectory", "C:\Missing\Profile")
     Assert.EqualsNumeric 1, prompt.Store.GetCallCount("ConfirmCreateDirectory", "C:\Missing\Profile")
     Assert.EqualsNumeric 0, fs_stub.Store.GetCallCount("CreateDirectory", "C:\Missing\Profile", False, True)
-    Assert.EqualsNumeric 0, process.Store.GetCallCount("Start")
+    Assert.EqualsNumeric 0, driver_process.Store.GetCallCount("Start")
     Assert.EqualsNumeric 0, client_double.Store.GetCallCountAll("Execute")
-    Assert.EqualsNumeric 0, body.Store.GetCallCount("RunAfterPreparation")
-    Assert.EqualsNumeric 0, body.Store.GetCallCount("ClearProgressAfterError")
+    Assert.EqualsNumeric 0, run_body_double.Store.GetCallCount("RunAfterPreparation")
+    Assert.EqualsNumeric 0, run_body_double.Store.GetCallCount("ClearProgressAfterError")
 End Sub
 Private Function pCreateToolSettings() As ToolSettingsTestDouble
     Dim result_value As ToolSettingsTestDouble
@@ -169,10 +169,10 @@ Private Function pCreateToolSettings() As ToolSettingsTestDouble
     result_value.AuthenticatedStartSelector = "#top-ready"
     result_value.ListTransitionOperationName = "OpenList"
 
-    Dim operations As ObjectList
-    Set operations = New_ObjectList("TransitionOperation")
-    Call operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
-    Set result_value.TransitionOperations = operations
+    Dim transition_operations As ObjectList
+    Set transition_operations = New_ObjectList("TransitionOperation")
+    Call transition_operations.Add(New_TransitionOperation("OpenList", "#open-list", WaitSelector:="#list-ready"))
+    Set result_value.TransitionOperations = transition_operations
 
     Set pCreateToolSettings = result_value
 End Function
